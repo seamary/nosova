@@ -30,7 +30,7 @@ public class Chat extends HttpServlet {
 //                        break;
 //                    response.getWriter().println(s);
 //                }
-
+//hghjghjgj
             response.getWriter().println("<form.txt action=Chat.java method=\"post\">\n" +
                     "<input type=\"text\" name=\"message\" size=40>\n" +
                     "<input type=\"submit\" value=\"Отпарвить\">\n" +
