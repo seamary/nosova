@@ -42,14 +42,14 @@ public class Chat extends HttpServlet {
         try {
             out = response.getWriter();
             //читаю и вывожу базу сообщений
-            messagesWriter(out, "WEB-INF\\db.txt");
+            messagesReaderWriter(out, "WEB-INF\\db.txt");
             //читаю html из файла и вывожу
-            txtReader(out, "WEB-INF\\form.txt");
+            txtReaderWriter(out, "WEB-INF\\form.txt");
         } catch (IOException ignored) {
         }
     }
 
-    private void txtReader(PrintWriter out, String path) throws IOException {
+    private void txtReaderWriter(PrintWriter out, String path) throws IOException {
         String filePath = getServletContext().getRealPath(path);
         InputStream is = new FileInputStream(new File(filePath));
         Reader r = new InputStreamReader(is, "utf-8");
@@ -63,7 +63,7 @@ public class Chat extends HttpServlet {
         is.close();
     }
 
-    private void messagesWriter(PrintWriter out, String path) throws IOException {
+    private void messagesReaderWriter(PrintWriter out, String path) throws IOException {
         String filePath = getServletContext().getRealPath(path);
         InputStream is = new FileInputStream(new File(filePath));
         Reader r = new InputStreamReader(is, "utf-8");
