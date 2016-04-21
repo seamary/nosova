@@ -19,13 +19,19 @@ public class Chat extends HttpServlet {
         if (request != null) {
             String message = request.getParameter("message");
             String filePathDB = getServletContext().getRealPath("WEB-INF\\db.txt");
-            FileOutputStream os = new FileOutputStream(filePathDB, true);
-            os.write(message.getBytes(), 0, message.length());
-//            PrintStream ps = new PrintStream(fos);
-//            ps.println(request.getParameter("message"));
-            os.close();
+            dbWriter(message, filePathDB);
+
         }
         responder(response);
+    }
+
+    private void dbWriter(String message, String filePathDB) throws IOException {
+        FileWriter fw = new FileWriter(filePathDB, true);
+        BufferedWriter bw = new BufferedWriter(fw);
+        bw.newLine();
+        bw.write(message);
+        bw.close();
+        fw.close();
     }
 
     private void responder(HttpServletResponse response) {
@@ -37,8 +43,7 @@ public class Chat extends HttpServlet {
             txtReader(out, "WEB-INF\\db.txt");
             //читаю html из файла
             txtReader(out, "WEB-INF\\form.txt");
-        } catch (IOException e) {
-            out.print(e.getMessage());
+        } catch (IOException ignored) {
         }
     }
 
