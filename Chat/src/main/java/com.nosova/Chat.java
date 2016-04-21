@@ -26,12 +26,14 @@ public class Chat extends HttpServlet {
     }
 
     private void dbWriter(String message, String filePathDB) throws IOException {
-        FileWriter fw = new FileWriter(filePathDB, true);
-        BufferedWriter bw = new BufferedWriter(fw);
-        bw.newLine();
-        bw.write(message);
-        bw.close();
-        fw.close();
+        if (message != null) {
+            FileWriter fw = new FileWriter(filePathDB, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.newLine();
+            bw.write(message);
+            bw.close();
+            fw.close();
+        }
     }
 
     private void responder(HttpServletResponse response) {
@@ -39,9 +41,9 @@ public class Chat extends HttpServlet {
         PrintWriter out = null;
         try {
             out = response.getWriter();
-            //читаю базу сообщений
-            txtReader(out, "WEB-INF\\db.txt");
-            //читаю html из файла
+            //читаю и вывожу базу сообщений
+            messagesWriter(out, "WEB-INF\\db.txt");
+            //читаю html из файла и вывожу
             txtReader(out, "WEB-INF\\form.txt");
         } catch (IOException ignored) {
         }
@@ -57,6 +59,20 @@ public class Chat extends HttpServlet {
             if (s == null)
                 break;
             out.println(s);
+        }
+        is.close();
+    }
+
+    private void messagesWriter(PrintWriter out, String path) throws IOException {
+        String filePath = getServletContext().getRealPath(path);
+        InputStream is = new FileInputStream(new File(filePath));
+        Reader r = new InputStreamReader(is, "utf-8");
+        BufferedReader br = new BufferedReader(r);
+        while (true) {
+            String s = br.readLine();
+            if (s == null)
+                break;
+            out.println(s + "</br>");
         }
         is.close();
     }
