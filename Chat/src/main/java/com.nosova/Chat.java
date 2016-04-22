@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 
 public class Chat extends HttpServlet {
-
     @Override
     //метод возвращает список всех обращений
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
@@ -18,8 +17,8 @@ public class Chat extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (request != null) {
             String message = request.getParameter("message");
-            String filePathDB = getServletContext().getRealPath("WEB-INF\\db.txt");
-            dbWriter(message, filePathDB);
+          //  String filePathDB = getServletContext().getRealPath("..\\..\\..\\6 sem\\nosova\\Chat\\src\\main\\webapp\\WEB-INF\\db.txt");
+            dbWriter(message, "E:\\Java\\6 sem\\nosova\\Chat\\src\\main\\webapp\\WEB-INF\\db.txt");
 
         }
         responder(response);
@@ -42,7 +41,7 @@ public class Chat extends HttpServlet {
         try {
             out = response.getWriter();
             //читаю и вывожу базу сообщений
-            messagesReaderWriter(out, "WEB-INF\\db.txt");
+            messagesReaderWriter(out, "E:\\Java\\6 sem\\nosova\\Chat\\src\\main\\webapp\\WEB-INF\\db.txt");
             //читаю html из файла и вывожу
             txtReaderWriter(out, "WEB-INF\\form.txt");
         } catch (IOException ignored) {
@@ -64,8 +63,8 @@ public class Chat extends HttpServlet {
     }
 
     private void messagesReaderWriter(PrintWriter out, String path) throws IOException {
-        String filePath = getServletContext().getRealPath(path);
-        InputStream is = new FileInputStream(new File(filePath));
+        //String filePath = getServletContext().getRealPath(path);
+        InputStream is = new FileInputStream(new File(path));
         Reader r = new InputStreamReader(is, "utf-8");
         BufferedReader br = new BufferedReader(r);
         while (true) {
