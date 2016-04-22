@@ -1,0 +1,4 @@
+<form action=Chat.java method="post">
+    <input type="text" name="message" size=40>
+    <input type="submit" value="Отправить">
+</form>
