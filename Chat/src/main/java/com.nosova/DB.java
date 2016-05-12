@@ -44,7 +44,7 @@ public class DB {
         } finally {
             return messages;
         }
-    }
+    } /*получить все сообщения из базы данных, построить на их основе список XML документов*/
 
     private Document buildDoc(String[] str) {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -70,6 +70,9 @@ public class DB {
         message.appendChild(messageText);
 
         return document;
-    }
+    } /*построить отдельный документ*/
 
+    public ArrayList<Document> getMessageList() {
+        return messageList;
+    }
 }
