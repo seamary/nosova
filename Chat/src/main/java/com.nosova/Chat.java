@@ -17,8 +17,8 @@ public class Chat extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (request != null) {
             String message = request.getParameter("message");
-          //  String filePathDB = getServletContext().getRealPath("..\\..\\..\\6 sem\\nosova\\Chat\\src\\main\\webapp\\WEB-INF\\db.txt");
-            dbWriter(message, "E:\\Java\\6 sem\\nosova\\Chat\\src\\main\\webapp\\WEB-INF\\db.txt");
+            String dbPath = "E:\\Java\\6 sem\\nosova\\Chat\\src\\main\\webapp\\WEB-INF\\db.txt";
+            dbWriter(message, dbPath);
 
         }
         responder(response);
@@ -29,6 +29,7 @@ public class Chat extends HttpServlet {
             FileWriter fw = new FileWriter(filePathDB, true);
             BufferedWriter bw = new BufferedWriter(fw);
             bw.newLine();
+
             bw.write(message);
             bw.close();
             fw.close();
