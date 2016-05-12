@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 
 public class Chat extends HttpServlet {
+    private DB myDataBase = new DB();
+    private
     @Override
     //метод возвращает список всех обращений
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
@@ -17,6 +19,7 @@ public class Chat extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (request != null) {
             String message = request.getParameter("message");
+
             String dbPath = "E:\\Java\\6 sem\\nosova\\Chat\\src\\main\\webapp\\WEB-INF\\db.txt";
             dbWriter(message, dbPath);
 
