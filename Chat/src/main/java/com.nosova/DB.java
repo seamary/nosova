@@ -16,37 +16,37 @@ import java.util.Arrays;
 
 public class DB {
     private Statement statement;
-    private ArrayList<Document> messageList;
+    private Document mainDoc;
+    private ArrayList <String[]> messageList = new ArrayList<String[]>();
     public DB () {
         try {
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/nosova", "postgres", "Y4V6s7xd");
             statement = connection.createStatement();
-            messageList = getAllMessages();
+            ArrayList<String[]> messageList = getMessageList();
+            mainDoc = buildDoc(messageList);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public ArrayList getAllMessages(){
-        ArrayList<Document> messages = new ArrayList<Document>();
+    private ArrayList<String[]> getMessageList(){ /*получить список всех сообщений из базы данных*/
         try {
             boolean execute = statement.execute("SELECT * FROM messages");
             if (execute){
                 ResultSet resultSet = statement.getResultSet();
                 while (resultSet.next()) {
-                    String[] str = {resultSet.getString(1), resultSet.getString(2), resultSet.getString(3)};
-                    Document doc = buildDoc(str);
-                    messages.add(doc);
+                    String[] strs = {resultSet.getString(1), resultSet.getString(2), resultSet.getString(3)};
+                    messageList.add(strs);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            return messages;
+            return messageList;
         }
-    } /*получить все сообщения из базы данных, построить на их основе список XML документов*/
+    }
 
-    private Document buildDoc(String[] str) {
+    private Document buildDoc(ArrayList<String[]> messageList) { /*построить документ на основе списка*/
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = null;
         try {
@@ -55,24 +55,37 @@ public class DB {
             e.printStackTrace();
         }
         Document document = documentBuilder.newDocument();
-        Element chatMessage = document.createElement("chat-message");
-        document.appendChild(chatMessage);
-        chatMessage.setAttribute("id", str[0]);
+        Element messages = document.createElement("messages");
+        document.appendChild(messages);
+        for (String[] str : messageList) {
+            Element chatMessage = document.createElement("chat-message");
+            messages.appendChild(chatMessage);
+            chatMessage.setAttribute("id", str[0]);
 
-        Element sender = document.createElement("sender");
-        chatMessage.appendChild(sender);
-        Text senderText = document.createTextNode(str[1]);
-        sender.appendChild(senderText);
+            Element sender = document.createElement("sender");
+            chatMessage.appendChild(sender);
+            Text senderText = document.createTextNode(str[1]);
+            sender.appendChild(senderText);
 
-        Element message = document.createElement("message");
-        chatMessage.appendChild(message);
-        Text messageText = document.createTextNode(str[2]);
-        message.appendChild(messageText);
-
+            Element message = document.createElement("message");
+            chatMessage.appendChild(message);
+            Text messageText = document.createTextNode(str[2]);
+            message.appendChild(messageText);
+        }
         return document;
-    } /*построить отдельный документ*/
+    }
 
-    public ArrayList<Document> getMessageList() {
-        return messageList;
+    public void addMessageToDB(String message)  {
+        try {
+            statement.executeQuery("INSERT INTO messages (name, text) VALUES ('User1', '" + message + "')");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        messageList = getMessageList();
+        mainDoc = buildDoc(messageList);
+    }
+
+    public Document getMainDoc() {
+        return mainDoc;
     }
 }
