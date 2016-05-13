@@ -15,10 +15,17 @@ public class Chat extends HttpServlet {
 
     @Override
     //просто отправляет клиенту информацию
-    public void doGet(HttpServletRequest request, HttpServletResponse response) {
-            responder(response);
+    public void doGet(HttpServletRequest request, HttpServletResponse response){
+        response.setContentType("text/html;charset=utf-8");
+        String xml = "<?xml version='1.0' encoding='UTF-8' standalone='no' ?> <messages><message date=\"2016-05-13 12:35:00\">Text of first message</message></messages>";
+        try {
+            response.getWriter().write(xml, 0, xml.length());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        /*responder(response);*/
     }
-
+/*
     @Override
     //принимает сообщение клиента, добавляет его в БД, (+ пока что еще выводит все заново)
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -43,7 +50,7 @@ public class Chat extends HttpServlet {
         } catch (IOException ignored) {
         }
     } /*метод должен посылать пользователю список сообщенек в виде XML*/
-
+/*
     private void dbWriter(String message, String filePathDB) throws IOException {
         if (message != null) {
             FileWriter fw = new FileWriter(filePathDB, true);
@@ -55,7 +62,7 @@ public class Chat extends HttpServlet {
             fw.close();
         }
     } /*метод должен добавлять в БД новую сообщеньку*/
-
+/*
     private void txtReaderWriter(PrintWriter out, String path) throws IOException {
         String filePath = getServletContext().getRealPath(path);
         InputStream is = new FileInputStream(new File(filePath));
@@ -69,7 +76,7 @@ public class Chat extends HttpServlet {
         }
         is.close();
     } /*этот метод вроде как писал на страницу HTML*/
-
+/*
     private void messagesReaderWriter(PrintWriter out, String path) throws IOException {
         //String filePath = getServletContext().getRealPath(path);
         InputStream is = new FileInputStream(new File(path));

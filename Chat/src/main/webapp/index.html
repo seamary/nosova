@@ -5,9 +5,15 @@
         <script src="https://code.jquery.com/jquery-2.2.3.js" integrity="sha256-laXWtGydpwqJ8JA+X9x2miwmaiKhn8tVmOVEigRNtP4=" crossorigin="anonymous"></script>
     </head>
     <body>
-        <script>jQuery.get( "/message" [, data ] [, success ] [, dataType ] )
-                потом обработчик post на кнопке
+        <script>
+            function parseMyXML(xml) {
+                console.log(xml);
+            }
+
+            jQuery.get({url: "/Chat/message", success: parseMyXML, dataType: "xml"});
+                //потом обработчик post на кнопке
         </script>
+        <div id="messageList"></div>
         <form action=Chat.java method="post">
             <input type="text" name="message" size=40>
             <input type="submit" value="Отправить">
