@@ -5,6 +5,10 @@ import org.w3c.dom.Document;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -19,6 +23,13 @@ public class Chat extends HttpServlet {
         response.setContentType("text/html;charset=utf-8");
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><messages><chat-message id=\"1\"><sender>User1</sender><message>hello</message></chat-message><chat-message id=\"2\"><sender>User2</sender><message>hi</message></chat-message></messages>";
         try {
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            DOMSource source = new DOMSource(myDataBase.getMainDoc());
+            StringWriter writer = new StringWriter();
+            StreamResult result = new StreamResult(writer);
+            Transformer transformer = transformerFactory.newTransformer();
+            transformer.transform(source, result);
+            System.out.println(writer);
             response.getWriter().write(xml, 0, xml.length());
         } catch (Exception e) {
             e.printStackTrace();
