@@ -10,6 +10,6 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>Chat</servlet-name>
-    <url-pattern>/</url-pattern>
+    <url-pattern>/message</url-pattern>
   </servlet-mapping>
 </web-app>

@@ -17,7 +17,7 @@ public class Chat extends HttpServlet {
     //просто отправляет клиенту информацию
     public void doGet(HttpServletRequest request, HttpServletResponse response){
         response.setContentType("text/html;charset=utf-8");
-        String xml = "<?xml version='1.0' encoding='UTF-8' standalone='no' ?> <messages><message date=\"2016-05-13 12:35:00\">Text of first message</message></messages>";
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><messages><chat-message id=\"1\"><sender>User1</sender><message>hello</message></chat-message><chat-message id=\"2\"><sender>User2</sender><message>hi</message></chat-message></messages>";
         try {
             response.getWriter().write(xml, 0, xml.length());
         } catch (Exception e) {
