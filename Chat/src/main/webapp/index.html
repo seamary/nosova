@@ -6,8 +6,8 @@
     </head>
     <body>
         <script>
-            function parseMyXML(xml) {
-                console.log(xml);
+
+            function realiseMyXML(xml) {
                 var messages = xml.firstChild.childNodes;
                 for (var i = 0; i < messages.length; i++) {
                     var number = messages[i].getAttribute("id");
@@ -18,13 +18,27 @@
                     $("#messageList").append(text.textContent + "<br><br>");
                 }
             }
-            jQuery.get({url: "/Chat/message", success: parseMyXML, dataType: "xml"});
-                //потом обработчик post на кнопке
+
+            jQuery.get({url: "/Chat/message", success: realiseMyXML, dataType: "xml"});
+
+            function doPost() {
+                var msg = $("#chatMessage").val();
+                jQuery.post({
+                                url: "/Chat/message",
+                                data: msg,
+                                success: realiseMyXML,
+                                dataType: "xml"
+                });
+            }
+
+
+
+
         </script>
         <div id="messageList"></div>
-        <form action=Chat.java method="post">
-            <input type="text" name="message" size=40>
-            <input type="submit" value="Отправить">
+        <form id="form" action=Chat.java method="post">
+            <input type="text" id="chatMessage" name="message" size=40>
+            <input type="button" value="Отправить">
         </form>
     </body>
 </html>

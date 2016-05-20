@@ -9,58 +9,57 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.util.ArrayList;
 
 public class Chat extends HttpServlet {
-    private DB myDataBase = new DB();
+    private DBfromList myDataBase = new DBfromList();
     private ArrayList<Document> messageList = new ArrayList<Document>();
     private Document mainDoc = myDataBase.getMainDoc();
 
     @Override
     //просто отправляет клиенту информацию
     public void doGet(HttpServletRequest request, HttpServletResponse response){
-        response.setContentType("text/html;charset=utf-8");
-        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><messages><chat-message id=\"1\"><sender>User1</sender><message>hello</message></chat-message><chat-message id=\"2\"><sender>User2</sender><message>hi</message></chat-message></messages>";
+        response.setContentType("text/xml; charset=utf-8");
         try {
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            DOMSource source = new DOMSource(myDataBase.getMainDoc());
-            StringWriter writer = new StringWriter();
-            StreamResult result = new StreamResult(writer);
+            mainDoc = myDataBase.getMainDoc();
+            DOMSource source = new DOMSource(mainDoc);
+            StreamResult result = new StreamResult(response.getWriter());
             Transformer transformer = transformerFactory.newTransformer();
             transformer.transform(source, result);
-            System.out.println(writer);
-            response.getWriter().write(xml, 0, xml.length());
         } catch (Exception e) {
             e.printStackTrace();
         }
         /*responder(response);*/
     }
-/*
+
     @Override
     //принимает сообщение клиента, добавляет его в БД, (+ пока что еще выводит все заново)
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (request != null) {
-            String message = request.getParameter("message");
+            String message = request.getReader().readLine();
             myDataBase.addMessageToDB(message);
             mainDoc = myDataBase.getMainDoc();
+            doGet(request, response);
         }
-        responder(response);
+//        responder(response);
     }
 
-    private void responder(HttpServletResponse response) {
-        response.setContentType("text/html;charset=utf-8");
-        PrintWriter out = null;
-        try {
-            out = response.getWriter();
-            //читаю и вывожу базу сообщений
-            out.write(mainDoc);
-           // messagesReaderWriter(out, "E:\\Java\\6 sem\\nosova\\Chat\\src\\main\\webapp\\WEB-INF\\db.txt");
-            //читаю html из файла и вывожу
-            txtReaderWriter(out, "WEB-INF\\form.txt");
-        } catch (IOException ignored) {
-        }
-    } /*метод должен посылать пользователю список сообщенек в виде XML*/
+//    private void responder(HttpServletResponse response) {
+//        response.setContentType("text/html;charset=utf-8");
+//        PrintWriter out = null;
+//        try {
+//            out = response.getWriter();
+//            //читаю и вывожу базу сообщений
+//            out.write(mainDoc);
+//           // messagesReaderWriter(out, "E:\\Java\\6 sem\\nosova\\Chat\\src\\main\\webapp\\WEB-INF\\db.txt");
+//            //читаю html из файла и вывожу
+//            txtReaderWriter(out, "WEB-INF\\form.txt");
+//        } catch (IOException ignored) {
+//        }
+//    } /*метод должен посылать пользователю список сообщенек в виде XML*/
 /*
     private void dbWriter(String message, String filePathDB) throws IOException {
         if (message != null) {
