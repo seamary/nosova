@@ -3,12 +3,11 @@
     <head>
         <meta charset="UTF-8" />
         <script src="https://code.jquery.com/jquery-2.2.3.js" integrity="sha256-laXWtGydpwqJ8JA+X9x2miwmaiKhn8tVmOVEigRNtP4=" crossorigin="anonymous"></script>
-    </head>
-    <body>
-        <script>
+        <script language="JavaScript">
 
             function realiseMyXML(xml) {
                 var messages = xml.firstChild.childNodes;
+                $("#messageList").empty();
                 for (var i = 0; i < messages.length; i++) {
                     var number = messages[i].getAttribute("id");
                     $("#messageList").append("\#" + number);
@@ -19,7 +18,7 @@
                 }
             }
 
-            jQuery.get({url: "/Chat/message", success: realiseMyXML, dataType: "xml"});
+
 
             function doPost() {
                 var msg = $("#chatMessage").val();
@@ -33,12 +32,19 @@
 
 
 
+        function init() {
+            jQuery.get({url: "/Chat/message", success: realiseMyXML});
 
+            $("#sender").bind('click', doPost);
+        }
         </script>
+    </head>
+    <body onload="init()">
+
         <div id="messageList"></div>
-        <form id="form" action=Chat.java method="post">
+        <form id="form" action="/Chat/message" method="post">
             <input type="text" id="chatMessage" name="message" size=40>
-            <input type="button" value="Отправить">
+            <input type="button" id="sender" value="Отправить">
         </form>
     </body>
 </html>
